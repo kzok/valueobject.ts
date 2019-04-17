@@ -1,15 +1,25 @@
 {
-  "private": true,
   "name": "valueobject.ts",
-  "version": "0.1.0",
   "description": "Tiny typesafe value object library for TypeScript",
+  "version": "0.1.2",
+  "author": "yesiamnot",
   "keywords": [
     "TypeScript",
     "typesafe",
     "value-object"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yesiamnot/valueobject.ts.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/yesiamnot/valueobject.ts",
   "files": [
-    "lib"
+    "lib",
+    "README.md",
+    "package.json",
+    "package-lock.json",
+    "LICENSE"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -25,18 +35,20 @@
     "lint-staged": "^8.1.5",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.17.0",
+    "rimraf": "^2.6.3",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.3"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "rimraf ./lib && tsc -p tsconfig.build.json",
     "test": "jest --watch",
     "lint": "run-s lint:*",
     "lint:prettier": "prettier --write **/*.{js,json,md}",
     "lint:eslint": "eslint --fix src/**/*.ts",
     "check": "run-s check:*",
     "check:jest": "jest",
-    "check:typescript": "tsc --noEmit --skipLibCheck"
+    "check:typescript": "tsc --noEmit --skipLibCheck",
+    "prepublish": "npm prune && npm run check && npm run build"
   },
   "husky": {
     "pre-commit": "lint-staged"
