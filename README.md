@@ -1,5 +1,7 @@
 # valueobject.ts
 
+![](https://img.shields.io/david/kzok/valueobject.ts.svg)
+
 Tiny typesafe value object library for TypeScript.
 
 <!-- TOC -->
