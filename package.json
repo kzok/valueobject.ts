@@ -1,0 +1,107 @@
+{
+  "name": "valueobject.ts",
+  "description": "Tiny typesafe value object library for TypeScript",
+  "version": "0.0.0-alpha1",
+  "author": "kzok",
+  "keywords": [
+    "TypeScript",
+    "typesafe",
+    "value-object"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yesiamnot/valueobject.ts.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/yesiamnot/valueobject.ts",
+  "files": [
+    "lib",
+    "README.md",
+    "package.json",
+    "package-lock.json",
+    "LICENSE"
+  ],
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-prettier": "^3.0.1",
+    "husky": "^1.3.1",
+    "jest": "^24.7.1",
+    "lint-staged": "^8.1.5",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.17.0",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.10.0",
+    "rollup-plugin-dts": "^0.14.0",
+    "rollup-plugin-terser": "^4.0.4",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.3"
+  },
+  "scripts": {
+    "build": "rimraf ./lib && rollup -c",
+    "test": "npm run build && jest --watch",
+    "lint": "run-s lint:*",
+    "lint:prettier": "prettier --write **/*.{js,json,md}",
+    "lint:eslint": "eslint --fix src/**/*.ts",
+    "check": "run-s check:*",
+    "check:jest": "jest",
+    "check:typescript": "tsc --noEmit --skipLibCheck",
+    "prepublish": "npm prune && npm run check && npm run build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{js,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": false,
+    "quoteProps": "consistent",
+    "trailingComma": "all",
+    "bracketSpacing": false,
+    "arrowParens": "avoid",
+    "overrides": [
+      {
+        "files": "*.md",
+        "options": {
+          "tabWidth": 4,
+          "printWidth": 120
+        }
+      }
+    ]
+  },
+  "jest": {
+    "preset": "ts-jest/presets/js-with-babel",
+    "testMatch": [
+      "<rootDir>/src/**/*.spec.ts{,x}",
+      "<rootDir>/test/**/*.spec.ts{,x}"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "tsx"
+    ]
+  }
+}
