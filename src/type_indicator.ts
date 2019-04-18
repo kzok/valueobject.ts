@@ -1,46 +1,51 @@
-
-/** Static type indicator */
-type TypeIndicator<_ = unknown> = {
-  ___VALUEOBJECT___TS_TYPE_INDICATOR: never;
+/** Static required type holder */
+type RequiredTypeHolder<T> = {
+  ___VALUEOBJECT_TS___REQUIRED_TYPE_HOLDER: T;
 };
 
-/** Static optional indicator */
-type OptionalIndicator<_ = unknown> = {
-  ___VALUEOBJECT_TS___OPTIONAL_INDICATOR: never;
+/** Static optional type holder */
+type OptionalTypeHolder<T> = {
+  ___VALUEOBJECT_TS___OPTIONAL_TYPE_HOLDER: T;
 };
 
-/** Type-function to restore indicators */
-type TypeOf<T extends TypeIndicator | OptionalIndicator>
-  = T extends TypeIndicator<infer R> ? R
-  : T extends OptionalIndicator<infer R> ? R
-  : never;
-
-/** Dictionary type indicator */
-export interface ObjectTypeIndicator {
-  readonly [k: string]: TypeIndicator | OptionalIndicator
+export interface TypeHolderDictionary {
+  readonly [k: string]: RequiredTypeHolder<any> | OptionalTypeHolder<any>;
 }
 
 /** Type-function to extract optional keys */
-type OptionalKeys<T extends ObjectTypeIndicator> = {
-  [P in keyof T]: T[P] extends OptionalIndicator ? P : never;
+type RequiredKeys<T extends TypeHolderDictionary> = {
+  [P in keyof T]: T[P] extends RequiredTypeHolder<any> ? P : never
+}[keyof T];
+
+/** Type-function to extract optional keys */
+type OptionalKeys<T extends TypeHolderDictionary> = {
+  [P in keyof T]: T[P] extends OptionalTypeHolder<any> ? P : never
 }[keyof T];
 
 /** Type-function to restore type holder dictionary */
-export type Restore<T extends ObjectTypeIndicator> = Readonly<
-  {[P in OptionalKeys<T>]?: TypeOf<T[P]>}
-  & {[P in Exclude<keyof T, OptionalKeys<T>>]: TypeOf<T[P]>}
+export type Restore<T extends TypeHolderDictionary> = Readonly<
+  {
+    [P in RequiredKeys<T>]: T[P] extends RequiredTypeHolder<infer R> ? R : never
+  } &
+    {
+      [P in OptionalKeys<T>]?: T[P] extends OptionalTypeHolder<infer R>
+        ? R
+        : never
+    }
 >;
 
-/** Dummy entity for TypeHolder & OptionalHolder */
-const DUMMY: TypeIndicator & OptionalIndicator = null as any;
+/** Dummy entity for TypeHolders */
+const D: RequiredTypeHolder<any> & OptionalTypeHolder<any> = null as any;
 
 /** TypeHolder factories */
-export const type = <T>(): TypeIndicator<T> => DUMMY;
+export const type = <T = unknown>(): RequiredTypeHolder<T> => D;
 type.string = type<string>();
 type.number = type<number>();
 type.boolean = type<boolean>();
 type.null = type<null>();
 type.undefined = type<undefined>();
-type.array = <T>(_?: TypeIndicator<T>) => DUMMY as TypeIndicator<ReadonlyArray<T>>;
-type.optional = <T>(_?: TypeIndicator<T>) => DUMMY as OptionalIndicator<T>;
-type.union = <T>(..._: TypeIndicator<T>[]) => DUMMY as TypeIndicator<T>;
+type.array = <T>(_?: RequiredTypeHolder<T>) =>
+  D as RequiredTypeHolder<ReadonlyArray<T>>;
+type.optional = <T>(_?: RequiredTypeHolder<T> | OptionalTypeHolder<T>) =>
+  D as OptionalTypeHolder<T>;
+type.union = <T>(..._: RequiredTypeHolder<T>[]) => D as RequiredTypeHolder<T>;

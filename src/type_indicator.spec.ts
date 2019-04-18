@@ -1,8 +1,9 @@
-import {ObjectTypeIndicator, Restore, type} from "./type_indicator";
+import {TypeHolderDictionary, Restore, type} from "./type_indicator";
 
-const createStaticAssert = <
-  T extends ObjectTypeIndicator
->(_1: T) => (_2: Restore<T>) => {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const createStaticAssert = <T extends TypeHolderDictionary>(_1: T) => (
+  _2: Restore<T>,
+): void => {
   /** raise compiling error if bad type match. */
 };
 
@@ -10,8 +11,8 @@ describe("Static type functions", () => {
   it("Basic example", () => {
     const assert = createStaticAssert({
       foo: type<string>(),
-      bar: type<number|string>(),
-      baz: type<null|undefined>(),
+      bar: type<number | string>(),
+      baz: type<null | undefined>(),
     });
     assert({
       foo: "str",

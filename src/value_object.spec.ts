@@ -41,7 +41,9 @@ describe(valueObject, () => {
       age: 40,
       greet: undefined,
     };
-    const person = ((arg: ValueType<typeof Person>) => new Person(arg))(initialValue)
+    const person = ((arg: ValueType<typeof Person>) => new Person(arg))(
+      initialValue,
+    );
     expect(person.greet()).toBe("Hello, I am Bob.");
     expect(person.toJSON()).toEqual({
       name: "Bob",

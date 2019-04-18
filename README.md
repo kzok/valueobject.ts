@@ -14,7 +14,7 @@ Tiny typesafe value object library for TypeScript.
 ## Brief example
 
 ```typescript
-import {valueObject, type, ValueType} from "valueobject.ts"
+import {valueObject, type, ValueType} from "valueobject.ts";
 
 class Person extends valueObject({
     name: type.string,
@@ -32,14 +32,16 @@ const initialValue = {
     name: "Bob",
     age: 20,
     greet: undefined,
-    growOne: () => {throw new Error("This method was overwritten!");},
+    growOne: () => {
+        throw new Error("The method won't be overwritten!");
+    },
 };
 const person = ((a: ValueType<typeof Person>) => new Person(a))(initialValue);
 
 console.log(person.greet());
-// > "Hello, I am Bob."
+// "Hello, I am Bob."
 console.log(person.growOne().age);
-// > 21
+// 21
 ```
 
 ## Why and when to use this?
@@ -48,15 +50,12 @@ In TypeScript, you can easily create value object with [parameter properties](ht
 
 ```typescript
 class Person {
-    constructor(
-        public readonly name: string,
-        public readonly age: number,
-    ) {}
+    constructor(public readonly name: string, public readonly age: number) {}
     greet(): string {
         return `Hello, I am ${this.name}.`;
     }
     growOne(): Person {
-        return new Person({...this, age: this.age + 1});
+        return new Person(this.name, this.age + 1);
     }
 }
 ```
@@ -68,22 +67,28 @@ class SomeLargeValueObject {
     public readonly prop1: number | null;
     public readonly prop2: number | null;
     public readonly prop3: number | null;
-    /** ... more props ... */
+    /**
+     * ... more props ...
+     */
     constructor(args: {
-        prop1: number | null,
-        prop2: number | null,
-        prop3: number | null,
-        /** ... more props ... */
+        prop1: number | null;
+        prop2: number | null;
+        prop3: number | null;
+        /**
+         * ... more props ...
+         */
     }) {
         this.prop1 = arg.prop1;
         this.prop2 = arg.prop2;
         this.prop3 = arg.prop3;
-        /** ... more assingments ... */
+        /** 
+         * ... more assingments ...
+         */
     }
 }
 ```
 
-This is **too** frustrating. So this library is created to handle large value object easily.
+With many properties, this approach is frustrating. This library is created for handling such a large value object more easily.
 
 ## Installation
 
