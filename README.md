@@ -4,10 +4,12 @@ Tiny typesafe value object library for TypeScript.
 
 <!-- TOC -->
 
-- [Brief example](#brief-example)
-- [Why and when to use this?](#why-and-when-to-use-this)
-- [Installation](#installation)
-- [API reference](#api-reference)
+-   [Brief example](#brief-example)
+-   [Features](#features)
+-   [Why and when to use this?](#why-and-when-to-use-this)
+-   [Installation](#installation)
+-   [API reference](#api-reference)
+-   [Credits](#credits)
 
 <!-- /TOC -->
 
@@ -43,6 +45,14 @@ console.log(person.greet());
 console.log(person.growOne().age);
 // 21
 ```
+
+## Features
+
+-   Built to ES5
+-   commonjs & ES6 module
+-   Runtime object property-key filtering to avoid class fields overwriting
+-   Typesafe and immutable class properties
+-   Spread operator of `this` can initialize a new instance
 
 ## Why and when to use this?
 
@@ -81,7 +91,7 @@ class SomeLargeValueObject {
         this.prop1 = arg.prop1;
         this.prop2 = arg.prop2;
         this.prop3 = arg.prop3;
-        /** 
+        /**
          * ... more assingments ...
          */
     }
@@ -92,8 +102,18 @@ With many properties, this approach is frustrating. This library is created for 
 
 ## Installation
 
-TODO: write
+Please use [npm](https://www.npmjs.com/).
+
+```
+$ npm install valueobject.ts
+```
+
+Then, use javascript module bundler like [webpack](https://webpack.js.org/) or [rollup](https://rollupjs.org/guide/en) to bundle this library with your code.
 
 ## API reference
 
 TODO: write
+
+## Credits
+
+-   The type definition system in this library is heavily inspired by [io-ts](https://github.com/gcanti/io-ts), that is awesome.
