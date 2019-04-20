@@ -77,4 +77,15 @@ describe(valueObject, () => {
       age: 40,
     });
   });
+
+  it("can compare equality with another value object", () => {
+    const person = new Person({name: "mike", age: 20});
+    expect(person.equals(new Person({name: "mike", age: 20}))).toBe(true);
+    expect(person.equals(new Person({name: "mike", age: 21}))).toBe(false);
+    expect(person.equals(new Person({name: "sam", age: 20}))).toBe(false);
+    expect(person.equals({name: "mike", age: 20})).toBe(true);
+    expect(person.equals({name: "mike", age: 20, excess: null} as any)).toBe(
+      false,
+    );
+  });
 });

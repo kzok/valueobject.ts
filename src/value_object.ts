@@ -60,7 +60,7 @@ export const valueObject = <T extends ValueObjectTypeDefinition>(
 
     equals(other: Restore<T>): boolean {
       const keys = Object.keys(other);
-      for (const k in keys) {
+      for (const k of keys) {
         if (predefinedKeys.indexOf(k) < 0) {
           return false;
         }
