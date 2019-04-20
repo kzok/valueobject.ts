@@ -16,12 +16,12 @@ type ValueObject<T extends {[k: string]: any}> = Readonly<T> & {
 };
 
 /** Constructor type of value object */
-interface ValueObjectConstructor<T extends {[k: string]: any}> {
+type ValueObjectConstructor<T extends {[k: string]: any}> = {
   /**
    * @param initalValue The initializing value of this value object
    */
   new (initalValue: Readonly<T>): ValueObject<T>;
-}
+};
 
 export type ValueObjectTypeDefinition = Readonly<{
   [k: string]: TypeHolder<any>;
@@ -60,7 +60,7 @@ export const valueObject = <T extends ValueObjectTypeDefinition>(
 
     equals(other: Restore<T>): boolean {
       const keys = Object.keys(other);
-      for (const k in keys) {
+      for (const k of keys) {
         if (predefinedKeys.indexOf(k) < 0) {
           return false;
         }
