@@ -1,37 +1,36 @@
 /** Static required type holder */
-type RequiredTypeHolder<T> = {
-  ___VALUEOBJECT_TS___REQUIRED_TYPE_HOLDER: T;
-};
-
-/** Static optional type holder */
-type OptionalTypeHolder<T> = {
-  ___VALUEOBJECT_TS___OPTIONAL_TYPE_HOLDER: T;
-};
-
-export interface TypeHolderDictionary {
-  readonly [k: string]: RequiredTypeHolder<any> | OptionalTypeHolder<any>;
+export abstract class RequiredTypeHolder<T extends any = any> {
+  private tag!: "required";
+  _!: T;
 }
 
+/** Static optional type holder */
+export abstract class OptionalTypeHolder<T extends any = any> {
+  private tag!: "optional";
+  _!: T;
+}
+
+export type TypeHolder<T extends any = any> =
+  | RequiredTypeHolder<T>
+  | OptionalTypeHolder<T>;
+
+/** Type-function to extract type holder */
+type TypeOf<T extends TypeHolder> = T extends TypeHolder ? T["_"] : never;
+
 /** Type-function to extract optional keys */
-type RequiredKeys<T extends TypeHolderDictionary> = {
-  [P in keyof T]: T[P] extends RequiredTypeHolder<any> ? P : never
+type RequiredKeys<T extends {[k: string]: TypeHolder}> = {
+  [P in keyof T]: T[P] extends RequiredTypeHolder ? P : never
 }[keyof T];
 
 /** Type-function to extract optional keys */
-type OptionalKeys<T extends TypeHolderDictionary> = {
-  [P in keyof T]: T[P] extends OptionalTypeHolder<any> ? P : never
+type OptionalKeys<T extends {[k: string]: TypeHolder}> = {
+  [P in keyof T]: T[P] extends OptionalTypeHolder ? P : never
 }[keyof T];
 
 /** Type-function to restore type holder dictionary */
-export type Restore<T extends TypeHolderDictionary> = Readonly<
-  {
-    [P in RequiredKeys<T>]: T[P] extends RequiredTypeHolder<infer R> ? R : never
-  } &
-    {
-      [P in OptionalKeys<T>]?: T[P] extends OptionalTypeHolder<infer R>
-        ? R
-        : never
-    }
+export type Restore<T extends {[k: string]: TypeHolder}> = Readonly<
+  {[P in RequiredKeys<T>]: TypeOf<T[P]>} &
+    {[P in OptionalKeys<T>]?: TypeOf<T[P]>}
 >;
 
 /** Dummy entity for TypeHolders */

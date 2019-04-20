@@ -1,19 +1,29 @@
 # valueobject.ts
 
-![](https://img.shields.io/david/kzok/valueobject.ts.svg)
+[![](https://img.shields.io/npm/v/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master)
 
 Tiny typesafe value object library for TypeScript.
 
 <!-- TOC -->
 
--   [Brief example](#brief-example)
 -   [Features](#features)
+-   [Brief example](#brief-example)
 -   [Why and when to use this?](#why-and-when-to-use-this)
 -   [Installation](#installation)
 -   [API reference](#api-reference)
 -   [Credits](#credits)
 
 <!-- /TOC -->
+
+## Features
+
+-   ecmascript 5
+-   about 1k bytes
+-   commonjs & es module
+-   typesafe and statically immutable class properties
+-   no immutability in runtime (so better performance than other value object libraries)
+-   object keys filtering in runtime
+-   defining static type and runtime object keys at once
 
 ## Brief example
 
@@ -35,26 +45,18 @@ class Person extends valueObject({
 const initialValue = {
     name: "Bob",
     age: 20,
-    greet: undefined,
+    greet: null,
     growOne: () => {
         throw new Error("The method won't be overwritten!");
     },
 };
-const person = ((a: ValueType<typeof Person>) => new Person(a))(initialValue);
+const person = new Person(initialValue as ValueType<typeof Person>);
 
 console.log(person.greet());
 // "Hello, I am Bob."
 console.log(person.growOne().age);
 // 21
 ```
-
-## Features
-
--   Built to ES5
--   commonjs & ES6 module
--   Runtime object property-key filtering to avoid class fields overwriting
--   Typesafe and immutable class properties
--   Spread operator of `this` can initialize a new instance
 
 ## Why and when to use this?
 
@@ -100,7 +102,78 @@ class SomeLargeValueObject {
 }
 ```
 
-With many properties, this approach is frustrating. This library is created for handling such a large value object more easily.
+With many properties, this approach is frustrating.
+So many prior value object libraries introduce the following approach.
+
+```typescript
+interface ValueObjectConstructor<T extends {[k: string]: any}> {
+    new (initialValue: T): Readonly<T>;
+}
+
+const valueObject = <T extends {[k: string]: any}>(): ValueObjectConstructor<T> => {
+    return class {
+        constructor(arg: T) {
+            Object.assign(this, arg);
+        }
+    };
+};
+
+//-----------------
+
+interface SomeLargeValueData {
+    prop1: number | null;
+    prop2: number | null;
+    prop3: number | null;
+    /**
+     * ... more props ...
+     */
+}
+
+class SomeLargeValueObject extends valueObject<SomeLargeValueData>() {
+    isValid(): boolean {
+        /**
+         * ... implementation ...
+         */
+    }
+}
+```
+
+In TypeScript, however, this approach has a problem.
+Because TypeScript has no exact type, a runtime error occurs in the following case.
+
+```TypeScript
+const factory = (data: SomeLargeValueData): SomeLargeValueObject => {
+    return new SomeLargeValueObject(data);
+}
+
+const passedData = {
+    prop1: 1,
+    prop2: 2,
+    prop3: 3,
+    /**
+     * ... more props ...
+     */
+    // Oops! This will overwrite the class method!
+    isValid: true,
+    /**
+     * ... some more other props for other usecase ...
+     */
+};
+
+const nextValueObject = factory(passedData);
+
+//-----------------
+
+// TypeError: isValid is not a function
+if (nextValueObject.isValid()) {
+    /**
+     * ... implementation ...
+     */
+}
+
+```
+
+Because of that, value object in this library filters constructor's argument object keys.
 
 ## Installation
 
@@ -114,8 +187,52 @@ Then, use javascript module bundler like [webpack](https://webpack.js.org/) or [
 
 ## API reference
 
-TODO: write
+<a name="api-value-object" href="#api-value-object">#</a>function **valueObject**(_typedef_)
+
+Returns value object base class. The base class has 2 method, `toJSON()` which returns plain object of its data, and `equals(other)` which compare shallowly with passed parameter _other_. The parameter _typedef_'s type is dictionary of string and `TypeHolder`, which can create with `type<T>()` function.
+
+<a name="api-type" href="#api-type">#</a>function **type**<_T_>()
+
+Returns `TypeHolder` that contains type _T_. This is used to create value object type definition. Its basic usage is like following.
+
+```typescript
+class Alert extends valueObject({
+    startedAt: type<Date>(),
+    finishedAt: type<Date | null>(),
+    title: type<string>(),
+    parentAlert: type<Alert | null>(),
+}) {
+    /** ... */
+}
+```
+
+`type()` has aliases of following frequent usecase.
+
+-   `type.string`
+    -   equals to `type<string>()`
+-   `type.number`
+    -   equals to `type<number>()`
+-   `type.boolean`
+    -   equals to `type<boolean>()`
+-   `type.null`
+    -   equals to `type<null>()`
+-   `type.undefined`
+    -   equals to `type<undefined>()`
+-   `type.array<T>(arg?: T)`
+    -   example: `type.array(type.string)`
+-   `type.optional<T>(arg?: T)`
+    -   required to define optional field
+-   `type.union<T>(...args: T[])`
+    -   example: `type.union(type.string, type.null)`
+
+<a name="api-value-type" href="#api-value-type">#</a>type **ValueType**<_T_>
+
+Returns value object data type of the type parameter. Use like following.
+
+```typescript
+type PersonData = ValueType<typeof Person>;
+```
 
 ## Credits
 
--   The type definition system in this library is heavily inspired by [io-ts](https://github.com/gcanti/io-ts), that is awesome.
+-   The type definition system in this library is heavily influenced by [io-ts](https://github.com/gcanti/io-ts).
