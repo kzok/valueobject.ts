@@ -14,7 +14,7 @@ describe(valueObject, () => {
     }
   }
 
-  it("Basic example", () => {
+  it("can create value object", () => {
     const person = new Person({name: "Mike", age: 20});
     expect(person.name).toBe("Mike");
     expect(person.age).toBe(20);
@@ -35,18 +35,45 @@ describe(valueObject, () => {
     });
   });
 
-  it("The initialValue's property names should be filtered.", () => {
-    const initialValue = {
+  it("should filter property keys of initalValue", () => {
+    const initalValue = {
       name: "Bob",
-      age: 40,
-      greet: undefined,
+      age: 20,
+      greet: null,
+      growOne: () => {
+        throw new Error("The method won't be overwritten!");
+      },
     };
-    const person = ((arg: ValueType<typeof Person>) => new Person(arg))(
-      initialValue,
-    );
+    const person = new Person(initalValue as ValueType<typeof Person>);
     expect(person.greet()).toBe("Hello, I am Bob.");
     expect(person.toJSON()).toEqual({
       name: "Bob",
+      age: 20,
+    });
+    expect(person.toJSON()).not.toEqual({
+      name: "Bob",
+      age: 20,
+      greet: null,
+    });
+  });
+
+  it("is tolerant to prototype injection", () => {
+    const initialValue = {
+      name: "Sam",
+      age: 40,
+      __proto__: {
+        greet: () => {
+          throw new Error("The prototype injection occured!");
+        },
+        toJSON: () => {
+          throw new Error("The prototype injection occured!");
+        },
+      },
+    };
+    const person = new Person(initialValue as ValueType<typeof Person>);
+    expect(person.greet()).toBe("Hello, I am Sam.");
+    expect(person.toJSON()).toEqual({
+      name: "Sam",
       age: 40,
     });
   });
