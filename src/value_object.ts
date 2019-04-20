@@ -16,12 +16,12 @@ type ValueObject<T extends {[k: string]: any}> = Readonly<T> & {
 };
 
 /** Constructor type of value object */
-interface ValueObjectConstructor<T extends {[k: string]: any}> {
+type ValueObjectConstructor<T extends {[k: string]: any}> = {
   /**
    * @param initalValue The initializing value of this value object
    */
   new (initalValue: Readonly<T>): ValueObject<T>;
-}
+};
 
 export type ValueObjectTypeDefinition = Readonly<{
   [k: string]: TypeHolder<any>;
