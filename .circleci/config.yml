@@ -18,6 +18,9 @@ jobs:
       - run:
           name: "Run type-check & unit-tests"
           command: "npm run check"
+      - run:
+          name: "Post code coverage"
+          command: cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
 workflows:
   version: 2
   test:

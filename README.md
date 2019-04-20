@@ -1,6 +1,6 @@
 # valueobject.ts
 
-[![](https://img.shields.io/npm/v/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master)
+[![](https://img.shields.io/npm/v/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master) [![Coverage Status](https://coveralls.io/repos/github/kzok/valueobject.ts/badge.svg?branch=master)](https://coveralls.io/github/kzok/valueobject.ts?branch=master)
 
 Tiny typesafe value object library for TypeScript.
 
