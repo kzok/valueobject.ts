@@ -1,21 +1,30 @@
-import {Restore, TypeHolder} from "./type_indicator";
+import {Restore, TypeHolder} from "./type_holder";
 
-/** Forbidden keys of value object */
+/**
+ * Forbidden keys of value object
+ */
 const FORBIDDEN_KEYS = ["__proto__", "toJSON", "equals"] as const;
 
+/**
+ * Value object base class interface
+ * @template T Value object data type
+ */
 type ValueObject<T extends {[k: string]: any}> = Readonly<T> & {
   /**
    * @returns plain object
    */
   toJSON(): T;
   /**
-   * @param {T} other comparee
-   * @returns {boolean} The results of shallow comparing
+   * @param other comparee
+   * @returns The results of shallow comparing
    */
   equals(other: T): boolean;
 };
 
-/** Constructor type of value object */
+/**
+ * Constructor type of value object
+ * @template T Value object data type
+ */
 type ValueObjectConstructor<T extends {[k: string]: any}> = {
   /**
    * @param initalValue The initializing value of this value object
@@ -23,12 +32,18 @@ type ValueObjectConstructor<T extends {[k: string]: any}> = {
   new (initalValue: Readonly<T>): ValueObject<T>;
 };
 
+/**
+ * Type-definition of value object data type
+ */
 export type ValueObjectTypeDefinition = Readonly<{
   [k: string]: TypeHolder<any>;
 }> &
   {[P in typeof FORBIDDEN_KEYS[0]]?: never};
 
-/** Type-function to restore data type from ValueObjectConstructor */
+/**
+ * Type-function to restore data type from ValueObjectConstructor
+ * @template T Value object class type
+ */
 export type ValueType<
   T extends ValueObjectConstructor<any>
 > = T extends ValueObjectConstructor<infer R> ? R : never;
@@ -36,17 +51,38 @@ export type ValueType<
 /**
  * @param typedef type definition of value object
  * @returns base class of value object
+ *
+ * @example
+ * ```typescript
+ * import {valueObject, type, ValueType} from "valueobject.ts";
+ *
+ * class Person extends valueObject({
+ *     name: type.string,
+ *     age: type.number,
+ * }) {
+ *     greet(): string {
+ *         return `Hello, I am ${this.name}.`;
+ *     }
+ *     growOne(): Person {
+ *         return new Person({...this, age: this.age + 1});
+ *     }
+ * }
+ * ```
  */
 export const valueObject = <T extends ValueObjectTypeDefinition>(
   typedef: T,
 ): ValueObjectConstructor<Restore<T>> => {
   const predefinedKeys = Object.keys(typedef).filter(
-    e => (FORBIDDEN_KEYS as readonly string[]).indexOf(e) < 0,
+    e => (FORBIDDEN_KEYS as ReadonlyArray<string>).indexOf(e) < 0,
   );
   return class {
     constructor(arg: Restore<T>) {
       for (const k of predefinedKeys) {
-        (this as any)[k] = (arg as any)[k];
+        Object.defineProperty(this, k, {
+          value: (arg as any)[k],
+          enumerable: true,
+          writable: false,
+        });
       }
     }
 

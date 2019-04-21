@@ -8,7 +8,10 @@ module.exports = [
       {file: "lib/index.js", format: "cjs"},
       {file: "lib/index.mjs", format: "esm"},
     ],
-    plugins: [ts({tsconfig: "./tsconfig.json"}), terser()],
+    plugins: [
+      ts({tsconfig: "./tsconfig.json"}),
+      terser({ecma: 5, toplevel: true, ie8: true}),
+    ],
   },
   {
     input: "./src/index.ts",

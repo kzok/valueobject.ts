@@ -1,4 +1,4 @@
-import {TypeHolder, Restore, type} from "./type_indicator";
+import {TypeHolder, Restore, type} from "./type_holder";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const expectType = <T1 extends {[k: string]: TypeHolder}>(_1: T1) => {

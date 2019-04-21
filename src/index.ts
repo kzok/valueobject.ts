@@ -1,2 +1,2 @@
-export {type} from "./type_indicator";
+export {type} from "./type_holder";
 export * from "./value_object";
