@@ -57,7 +57,7 @@ describe(valueObject, () => {
     });
   });
 
-  it("is tolerant to prototype injection", () => {
+  it(`is tolerant of "__proto__" injection`, () => {
     const initialValue = {
       name: "Sam",
       age: 40,
@@ -78,7 +78,7 @@ describe(valueObject, () => {
     });
   });
 
-  it("can compare equality with another value object", () => {
+  it("can compare shallow equality with another value object", () => {
     const person = new Person({name: "mike", age: 20});
     expect(person.equals(new Person({name: "mike", age: 20}))).toBe(true);
     expect(person.equals(new Person({name: "mike", age: 21}))).toBe(false);
@@ -87,5 +87,12 @@ describe(valueObject, () => {
     expect(person.equals({name: "mike", age: 20, excess: null} as any)).toBe(
       false,
     );
+  });
+
+  it("throws an exception when you mutate a value object's property", () => {
+    const person = new Person({name: "mike", age: 20});
+    expect(() => ((person as any).name = "bob")).toThrowError();
+    expect(() => ((person as any).age = 21)).toThrowError();
+    expect(person.toJSON()).toEqual({name: "mike", age: 20});
   });
 });

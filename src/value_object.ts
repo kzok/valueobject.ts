@@ -41,12 +41,16 @@ export const valueObject = <T extends ValueObjectTypeDefinition>(
   typedef: T,
 ): ValueObjectConstructor<Restore<T>> => {
   const predefinedKeys = Object.keys(typedef).filter(
-    e => (FORBIDDEN_KEYS as readonly string[]).indexOf(e) < 0,
+    e => (FORBIDDEN_KEYS as ReadonlyArray<string>).indexOf(e) < 0,
   );
   return class {
     constructor(arg: Restore<T>) {
       for (const k of predefinedKeys) {
-        (this as any)[k] = (arg as any)[k];
+        Object.defineProperty(this, k, {
+          value: (arg as any)[k],
+          enumerable: true,
+          writable: false,
+        });
       }
     }
 
