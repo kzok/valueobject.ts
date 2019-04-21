@@ -1,4 +1,4 @@
-import {type} from "./type_indicator";
+import {type} from "./type_holder";
 import {valueObject, ValueType} from "./value_object";
 
 describe(valueObject, () => {
