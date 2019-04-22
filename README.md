@@ -1,8 +1,10 @@
 # valueobject.ts
 
-[![](https://img.shields.io/npm/v/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://david-dm.org/kzok/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master) [![Coverage Status](https://coveralls.io/repos/github/kzok/valueobject.ts/badge.svg?branch=master)](https://coveralls.io/github/kzok/valueobject.ts?branch=master)
+---
 
 Tiny typesafe value object library for TypeScript.
+
+[![](https://img.shields.io/npm/v/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://david-dm.org/kzok/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master) [![Coverage Status](https://coveralls.io/repos/github/kzok/valueobject.ts/badge.svg?branch=master)](https://coveralls.io/github/kzok/valueobject.ts?branch=master)
 
 <!-- TOC -->
 
@@ -18,7 +20,7 @@ Tiny typesafe value object library for TypeScript.
 ## Features
 
 -   ecmascript 5
--   about 1k bytes
+-   about 1k bytes with zero dependencies
 -   commonjs & es module
 -   typesafe and immutable class properties
 -   object keys filtering in runtime
@@ -130,9 +132,7 @@ interface SomeLargeValueData {
 
 class SomeLargeValueObject extends valueObject<SomeLargeValueData>() {
     isValid(): boolean {
-        /**
-         * ... implementation ...
-         */
+        /** ... */
     }
 }
 ```
@@ -165,9 +165,7 @@ const nextValueObject = factory(passedData);
 
 // TypeError: isValid is not a function
 if (nextValueObject.isValid()) {
-    /**
-     * ... implementation ...
-     */
+    /** ... */
 }
 
 ```
@@ -226,7 +224,7 @@ class Alert extends valueObject({
 
 <a name="api-value-type" href="#api-value-type">#</a>type **ValueType**<_T_>
 
-Returns value object data type of the type parameter. Use like following.
+Returns value object data type of the type parameter. Please use like following.
 
 ```typescript
 type PersonData = ValueType<typeof Person>;
@@ -234,4 +232,7 @@ type PersonData = ValueType<typeof Person>;
 
 ## Credits
 
+-   This library is inspired by the prior arts below:
+    -   https://github.com/alexeyraspopov/dataclass
+    -   https://github.com/almin/ddd-base#valueobject
 -   The type definition system in this library is heavily influenced by [io-ts](https://github.com/gcanti/io-ts).
