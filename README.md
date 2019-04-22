@@ -116,7 +116,7 @@ const valueObject = <T extends {[k: string]: any}>(): ValueObjectConstructor<T> 
         constructor(arg: T) {
             Object.assign(this, arg);
         }
-    };
+    } as any;
 };
 
 //-----------------
@@ -155,7 +155,7 @@ const passedData = {
     // Oops! This will overwrite the class method!
     isValid: true,
     /**
-     * ... some more other props for other usecase ...
+     * ... some more other props for other usecases ...
      */
 };
 
@@ -170,7 +170,7 @@ if (nextValueObject.isValid()) {
 
 ```
 
-Because of that, value object in this library filters constructor's argument object keys.
+Because of that, this library filters constructor argument's property keys.
 
 ## Installation
 
@@ -190,20 +190,19 @@ Returns value object base class. The base class has 2 method, `toJSON()` which r
 
 <a name="api-type" href="#api-type">#</a>function **type**<_T_>()
 
-Returns `TypeHolder` that contains type _T_. This is used to create value object type definition. Its basic usage is like following.
+Returns `TypeHolder` that contains type _T_, to create value object type definition. Its basic usage is like following.
 
 ```typescript
-class Alert extends valueObject({
-    startedAt: type<Date>(),
-    finishedAt: type<Date | null>(),
-    title: type<string>(),
-    parentAlert: type<Alert | null>(),
+class Comment extends valueObject({
+    createdAt: type<Date>(),
+    text: type<string>(),
+    parent: type<Comment | null>(),
 }) {
     /** ... */
 }
 ```
 
-`type()` has aliases of following frequent usecase.
+`type()` has aliases of following frequent usecases.
 
 -   `type.string`
     -   equals to `type<string>()`
