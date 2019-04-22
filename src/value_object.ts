@@ -15,8 +15,8 @@ type ValueObject<T extends {[k: string]: any}> = Readonly<T> & {
    */
   toJSON(): T;
   /**
-   * @param other comparee
-   * @returns The results of shallow comparing
+   * @param other argument to compare
+   * @returns The results of shallow comparison
    */
   equals(other: T): boolean;
 };

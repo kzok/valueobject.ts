@@ -55,56 +55,60 @@ export type Restore<T extends {[k: string]: TypeHolder}> = Readonly<
 >;
 
 /**
- * Dummy entity of type holder
+ * Dummy entity of `TypeHolder`
  */
 const DUMMY: RequiredTypeHolder<any> & OptionalTypeHolder<any> = null as any;
 
 /**
- * TypeHolder factories
- * @template T type to hold
- * @returns type holder
+ * Dummy entity of `type`
  */
-export const type = <T = unknown>(): RequiredTypeHolder<T> => DUMMY;
+const _t = () => DUMMY;
+_t.string = DUMMY;
+_t.number = DUMMY;
+_t.boolean = DUMMY;
+_t.null = DUMMY;
+_t.undefined = DUMMY;
+_t.optional = _t;
+_t.array = _t;
+_t.union = _t;
 
-/**
- * Optional modifier of `type<T>()`
- */
-type.optional = <T>(_?: RequiredTypeHolder<T>) =>
-  DUMMY as OptionalTypeHolder<T>;
-
-/**
- * An alias of `type<string>()`
- */
-type.string = type<string>();
-
-/**
- * An alias of `type<number>()`
- */
-type.number = type<number>();
-
-/**
- * An alias of `type<boolean>()`
- */
-type.boolean = type<boolean>();
-
-/**
- * An alias of `type<null>()`
- */
-type.null = type<null>();
-
-/**
- * An alias of `type<undefined>()`
- */
-type.undefined = type<undefined>();
-
-/**
- * An alias of `type<ReadonlyArray<T>>()`
- */
-type.array = <T>(_?: RequiredTypeHolder<T>) =>
-  DUMMY as RequiredTypeHolder<ReadonlyArray<T>>;
-
-/**
- * An alias of `type<T1 | T2 | T3 | ...>()`
- */
-type.union = <T>(..._: RequiredTypeHolder<T>[]) =>
-  DUMMY as RequiredTypeHolder<T>;
+export const type: {
+  /**
+   * TypeHolder factories
+   * @template T type to hold
+   * @returns type holder
+   */
+  <T = unknown>(): RequiredTypeHolder<T>;
+  /**
+   * An alias of `type<string>()`
+   */
+  readonly string: RequiredTypeHolder<string>;
+  /**
+   * An alias of `type<number>()`
+   */
+  readonly number: RequiredTypeHolder<number>;
+  /**
+   * An alias of `type<boolean>()`
+   */
+  readonly boolean: RequiredTypeHolder<boolean>;
+  /**
+   * An alias of `type<null>()`
+   */
+  readonly null: RequiredTypeHolder<null>;
+  /**
+   * An alias of `type<undefined>()`
+   */
+  readonly undefined: RequiredTypeHolder<undefined>;
+  /**
+   * Optional modifier of `type<T>()`
+   */
+  optional<T>(_?: RequiredTypeHolder<T>): OptionalTypeHolder<T>;
+  /**
+   * An alias of `type<ReadonlyArray<T>>()`
+   */
+  array<T>(_?: RequiredTypeHolder<T>): RequiredTypeHolder<ReadonlyArray<T>>;
+  /**
+   * An alias of `type<T1 | T2 | T3 | ...>()`
+   */
+  union<T>(..._: RequiredTypeHolder<T>[]): RequiredTypeHolder<T>;
+} = _t;
