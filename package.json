@@ -1,8 +1,8 @@
 {
   "name": "valueobject.ts",
   "description": "Tiny typesafe value object library for TypeScript",
-  "version": "0.0.0-alpha5",
-  "author": "kzok",
+  "version": "0.0.0-alpha4",
+  "author": "kzok (https://github.com/kzok)",
   "keywords": [
     "TypeScript",
     "typesafe",
@@ -10,10 +10,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yesiamnot/valueobject.ts.git"
+    "url": "git+https://github.com/kzok/valueobject.ts.git"
   },
   "license": "MIT",
-  "homepage": "https://github.com/yesiamnot/valueobject.ts",
+  "homepage": "https://github.com/kzok/valueobject.ts",
   "files": [
     "lib",
     "README.md",

@@ -1,8 +1,10 @@
 # valueobject.ts
 
-[![](https://img.shields.io/npm/v/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://david-dm.org/kzok/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master) [![Coverage Status](https://coveralls.io/repos/github/kzok/valueobject.ts/badge.svg?branch=master)](https://coveralls.io/github/kzok/valueobject.ts?branch=master)
+---
 
 Tiny typesafe value object library for TypeScript.
+
+[![](https://img.shields.io/npm/v/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://david-dm.org/kzok/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master) [![Coverage Status](https://coveralls.io/repos/github/kzok/valueobject.ts/badge.svg?branch=master)](https://coveralls.io/github/kzok/valueobject.ts?branch=master)
 
 <!-- TOC -->
 
@@ -18,7 +20,7 @@ Tiny typesafe value object library for TypeScript.
 ## Features
 
 -   ecmascript 5
--   about 1k bytes
+-   about 1k bytes with zero dependencies
 -   commonjs & es module
 -   typesafe and immutable class properties
 -   object keys filtering in runtime
@@ -114,7 +116,7 @@ const valueObject = <T extends {[k: string]: any}>(): ValueObjectConstructor<T> 
         constructor(arg: T) {
             Object.assign(this, arg);
         }
-    };
+    } as any;
 };
 
 //-----------------
@@ -130,9 +132,7 @@ interface SomeLargeValueData {
 
 class SomeLargeValueObject extends valueObject<SomeLargeValueData>() {
     isValid(): boolean {
-        /**
-         * ... implementation ...
-         */
+        /** ... */
     }
 }
 ```
@@ -155,7 +155,7 @@ const passedData = {
     // Oops! This will overwrite the class method!
     isValid: true,
     /**
-     * ... some more other props for other usecase ...
+     * ... some more other props for other usecases ...
      */
 };
 
@@ -165,14 +165,12 @@ const nextValueObject = factory(passedData);
 
 // TypeError: isValid is not a function
 if (nextValueObject.isValid()) {
-    /**
-     * ... implementation ...
-     */
+    /** ... */
 }
 
 ```
 
-Because of that, value object in this library filters constructor's argument object keys.
+Because of that, this library filters constructor argument's property keys.
 
 ## Installation
 
@@ -192,20 +190,19 @@ Returns value object base class. The base class has 2 method, `toJSON()` which r
 
 <a name="api-type" href="#api-type">#</a>function **type**<_T_>()
 
-Returns `TypeHolder` that contains type _T_. This is used to create value object type definition. Its basic usage is like following.
+Returns `TypeHolder` that contains type _T_, to create value object type definition. Its basic usage is like following.
 
 ```typescript
-class Alert extends valueObject({
-    startedAt: type<Date>(),
-    finishedAt: type<Date | null>(),
-    title: type<string>(),
-    parentAlert: type<Alert | null>(),
+class Comment extends valueObject({
+    createdAt: type<Date>(),
+    text: type<string>(),
+    parent: type<Comment | null>(),
 }) {
     /** ... */
 }
 ```
 
-`type()` has aliases of following frequent usecase.
+`type()` has aliases of following frequent usecases.
 
 -   `type.string`
     -   equals to `type<string>()`
@@ -226,7 +223,7 @@ class Alert extends valueObject({
 
 <a name="api-value-type" href="#api-value-type">#</a>type **ValueType**<_T_>
 
-Returns value object data type of the type parameter. Use like following.
+Returns value object data type of the type parameter. Please use like following.
 
 ```typescript
 type PersonData = ValueType<typeof Person>;
@@ -234,4 +231,7 @@ type PersonData = ValueType<typeof Person>;
 
 ## Credits
 
+-   This library is inspired by the prior arts below:
+    -   https://github.com/alexeyraspopov/dataclass
+    -   https://github.com/almin/ddd-base#valueobject
 -   The type definition system in this library is heavily influenced by [io-ts](https://github.com/gcanti/io-ts).
