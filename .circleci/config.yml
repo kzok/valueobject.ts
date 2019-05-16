@@ -20,7 +20,7 @@ jobs:
           command: "npm run check"
       - run:
           name: "Post code coverage"
-          command: cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+          command: ./node_modules/.bin/codecov
 workflows:
   version: 2
   test:
