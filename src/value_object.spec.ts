@@ -1,5 +1,4 @@
-import {type} from "./type_holder";
-import {valueObject, ValueType} from "./value_object";
+import {type, valueObject, ValueType} from "./";
 
 describe(valueObject, () => {
   class Person extends valueObject({
