@@ -95,6 +95,9 @@
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-babel",
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*"
+    ],
     "testMatch": [
       "<rootDir>/src/**/*.spec.ts{,x}",
       "<rootDir>/test/**/*.spec.ts{,x}"
