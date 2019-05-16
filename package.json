@@ -55,7 +55,8 @@
     "check": "run-s check:*",
     "check:jest": "jest --coverage",
     "check:typescript": "tsc --noEmit --skipLibCheck",
-    "prepublishOnly": "npm prune && npm run check && npm run build"
+    "prepublishOnly": "npm prune && npm run check && npm run build",
+    "release": "release-it"
   },
   "husky": {
     "hooks": {
