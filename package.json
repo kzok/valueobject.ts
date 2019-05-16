@@ -1,7 +1,7 @@
 {
   "name": "valueobject.ts",
   "description": "Tiny typesafe value object library for TypeScript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "kzok (https://github.com/kzok)",
   "keywords": [
     "TypeScript",
