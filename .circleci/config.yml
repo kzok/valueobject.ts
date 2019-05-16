@@ -26,17 +26,13 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{checksum "package-lock.json"}}
-            - v1-dependencies-
       - run: npm install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{checksum "package-lock.json"}}
+      - run: chmod +x ./script/deploy.sh
       - run: ./script/deploy.sh
 
 workflows:
   version: 2
-  test:
+  taskflow:
     jobs:
       - test
       - deploy:
