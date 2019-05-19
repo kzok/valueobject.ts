@@ -3,7 +3,7 @@
  * @template T type to hold
  */
 export class RequiredTypeHolder<_ extends any = any> {
-  private readonly _tag = "required" as const;
+  private readonly _tag!: "valueobject.ts - RequiredTypeHolder";
 }
 
 /**
@@ -11,7 +11,7 @@ export class RequiredTypeHolder<_ extends any = any> {
  * @template T type to hold
  */
 export class OptionalTypeHolder<_ extends any = any> {
-  private readonly _tag = "optional" as const;
+  private readonly _tag!: "valueobject.ts - OptionalTypeHolder";
 }
 
 /**

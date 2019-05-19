@@ -4,7 +4,7 @@ import {Restore, TypeHolder} from "./type_holder";
  * Base class of ValueObject (For type restriction)
  */
 class BaseClass<_ extends {[k: string]: any}> {
-  private readonly _tag = "valueobject.ts" as const;
+  private readonly _tag!: "valueobject.ts - BaseClass";
 }
 
 /**
