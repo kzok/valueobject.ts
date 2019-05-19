@@ -28,12 +28,6 @@ module.exports = {
         argsIgnorePattern: "^_",
       },
     ],
-    "@typescript-eslint/explicit-function-return-type": [
-      "warn",
-      {
-        allowExpressions: true,
-        allowTypedFunctionExpressions: true,
-      },
-    ],
+    "@typescript-eslint/explicit-function-return-type": "off",
   },
 };

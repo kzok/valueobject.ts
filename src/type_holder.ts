@@ -2,16 +2,16 @@
  * Compile-time required type holder
  * @template T type to hold
  */
-export abstract class RequiredTypeHolder<_ extends any = any> {
-  protected readonly _tag = "required" as const;
+export class RequiredTypeHolder<_ extends any = any> {
+  private readonly _tag = "required" as const;
 }
 
 /**
  * Compile-time optional type holder
  * @template T type to hold
  */
-export abstract class OptionalTypeHolder<_ extends any = any> {
-  protected readonly _tag = "optional" as const;
+export class OptionalTypeHolder<_ extends any = any> {
+  private readonly _tag = "optional" as const;
 }
 
 /**
@@ -108,5 +108,5 @@ export const type: {
   /**
    * An alias of `type<T1 | T2 | T3 | ...>()`
    */
-  union<T>(..._: RequiredTypeHolder<T>[]): RequiredTypeHolder<T>;
+  union<T>(..._: readonly RequiredTypeHolder<T>[]): RequiredTypeHolder<T>;
 } = _t;

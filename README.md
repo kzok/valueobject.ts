@@ -226,7 +226,7 @@ class Comment extends valueObject({
 Returns value object data type of the type parameter. Please use like following.
 
 ```typescript
-type PersonData = ValueType<typeof Person>;
+type PersonData = ValueType<Person>; // or `ValueType<typeof Person>;`
 ```
 
 ## Credits

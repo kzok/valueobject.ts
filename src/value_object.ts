@@ -1,6 +1,13 @@
 import {Restore, TypeHolder} from "./type_holder";
 
 /**
+ * Base class of ValueObject (For type restriction)
+ */
+class BaseClass<_ extends {[k: string]: any}> {
+  private readonly _tag = "valueobject.ts" as const;
+}
+
+/**
  * Forbidden keys of value object
  */
 const FORBIDDEN_KEYS = ["__proto__", "toJSON", "equals"] as const;
@@ -9,17 +16,18 @@ const FORBIDDEN_KEYS = ["__proto__", "toJSON", "equals"] as const;
  * Value object base class interface
  * @template T Value object data type
  */
-type ValueObject<T extends {[k: string]: any}> = Readonly<T> & {
-  /**
-   * @returns plain object
-   */
-  toJSON(): T;
-  /**
-   * @param other argument to compare
-   * @returns The results of shallow comparison
-   */
-  equals(other: T): boolean;
-};
+type ValueObject<T extends {[k: string]: any}> = Readonly<T> &
+  BaseClass<T> & {
+    /**
+     * @returns plain object
+     */
+    toJSON(): T;
+    /**
+     * @param other argument to compare
+     * @returns The results of shallow comparison
+     */
+    equals(other: Readonly<T>): boolean;
+  };
 
 /**
  * Constructor type of value object
@@ -33,7 +41,7 @@ type ValueObjectConstructor<T extends {[k: string]: any}> = {
 };
 
 /**
- * Type-definition of value object data type
+ * Type-definition of ValueObject data type
  */
 export type ValueObjectTypeDefinition = Readonly<{
   [k: string]: TypeHolder<any>;
@@ -42,11 +50,15 @@ export type ValueObjectTypeDefinition = Readonly<{
 
 /**
  * Type-function to restore data type from ValueObjectConstructor
- * @template T Value object class type
+ * @template T Value object class type or instance type
  */
 export type ValueType<
-  T extends ValueObjectConstructor<any>
-> = T extends ValueObjectConstructor<infer R> ? R : never;
+  T extends ValueObject<any> | (new (..._: any[]) => ValueObject<any>)
+> = T extends ValueObject<infer R>
+  ? R
+  : T extends new (..._: any[]) => ValueObject<infer R>
+  ? R
+  : never;
 
 /**
  * @param typedef type definition of value object
@@ -73,7 +85,7 @@ export const valueObject = <T extends ValueObjectTypeDefinition>(
   typedef: T,
 ): ValueObjectConstructor<Restore<T>> => {
   const predefinedKeys = Object.keys(typedef).filter(
-    e => (FORBIDDEN_KEYS as ReadonlyArray<string>).indexOf(e) < 0,
+    e => (FORBIDDEN_KEYS as readonly string[]).indexOf(e) < 0,
   );
   return class {
     constructor(arg: Restore<T>) {
