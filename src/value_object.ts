@@ -41,15 +41,7 @@ type ValueObjectConstructor<T extends {[k: string]: any}> = {
 };
 
 /**
- * Type-definition of ValueObject data type
- */
-export type ValueObjectTypeDefinition = Readonly<{
-  [k: string]: TypeHolder<any>;
-}> &
-  {[P in typeof FORBIDDEN_KEYS[0]]?: never};
-
-/**
- * Type-function to restore data type from ValueObjectConstructor
+ * Type-function to restore data type from ValueObject
  * @template T Value object class type or instance type
  */
 export type ValueType<
@@ -59,6 +51,14 @@ export type ValueType<
   : T extends new (..._: any[]) => ValueObject<infer R>
   ? R
   : never;
+
+/**
+ * Type-definition of ValueObject data type
+ */
+export type ValueObjectTypeDefinition = Readonly<{
+  [k: string]: TypeHolder<any>;
+}> &
+  {[P in typeof FORBIDDEN_KEYS[number]]?: never};
 
 /**
  * @param typedef type definition of value object
