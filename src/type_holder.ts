@@ -2,18 +2,16 @@
  * Compile-time required type holder
  * @template T type to hold
  */
-export abstract class RequiredTypeHolder<T extends any = any> {
-  private _tag!: "required";
-  _!: T;
+export class RequiredTypeHolder<_ extends any = any> {
+  private readonly _tag!: "valueobject.ts - RequiredTypeHolder";
 }
 
 /**
  * Compile-time optional type holder
  * @template T type to hold
  */
-export abstract class OptionalTypeHolder<T extends any = any> {
-  private _tag!: "optional";
-  _!: T;
+export class OptionalTypeHolder<_ extends any = any> {
+  private readonly _tag!: "valueobject.ts - OptionalTypeHolder";
 }
 
 /**
@@ -27,7 +25,7 @@ export type TypeHolder<T extends any = any> =
 /**
  * Type-function to extract type from type holder
  */
-type TypeOf<T extends TypeHolder> = T extends TypeHolder ? T["_"] : never;
+type TypeOf<T extends TypeHolder> = T extends TypeHolder<infer R> ? R : never;
 
 /**
  * Type-function to extract required keys
@@ -106,9 +104,9 @@ export const type: {
   /**
    * An alias of `type<ReadonlyArray<T>>()`
    */
-  array<T>(_?: RequiredTypeHolder<T>): RequiredTypeHolder<ReadonlyArray<T>>;
+  array<T>(_?: RequiredTypeHolder<T>): RequiredTypeHolder<readonly T[]>;
   /**
    * An alias of `type<T1 | T2 | T3 | ...>()`
    */
-  union<T>(..._: RequiredTypeHolder<T>[]): RequiredTypeHolder<T>;
+  union<T>(..._: readonly RequiredTypeHolder<T>[]): RequiredTypeHolder<T>;
 } = _t;

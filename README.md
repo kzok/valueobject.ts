@@ -186,7 +186,7 @@ Then, use javascript module bundler like [webpack](https://webpack.js.org/) or [
 
 <a name="api-value-object" href="#api-value-object">#</a>function **valueObject**(_typedef_)
 
-Returns value object base class. The base class has 2 method, `toJSON()` which returns plain object of its data, and `equals(other)` which compare shallowly with passed parameter _other_. The parameter _typedef_'s type is dictionary of string and `TypeHolder`, which can create with `type<T>()` function.
+Returns value object base class. The base class has 2 method, `toJSON()` which returns plain object of its data, and `equals(other)` which compare shallowly with passed parameter _other_. The parameter _typedef_'s type is plain object with properties type `TypeHolder`, which can create with `type<T>()` function.
 
 <a name="api-type" href="#api-type">#</a>function **type**<_T_>()
 
@@ -226,7 +226,7 @@ class Comment extends valueObject({
 Returns value object data type of the type parameter. Please use like following.
 
 ```typescript
-type PersonData = ValueType<typeof Person>;
+type PersonData = ValueType<Person>; // or `ValueType<typeof Person>;`
 ```
 
 ## Credits

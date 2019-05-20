@@ -1,5 +1,4 @@
-import {type} from "./type_holder";
-import {valueObject, ValueType} from "./value_object";
+import {type, valueObject, ValueType} from "./";
 
 describe(valueObject, () => {
   class Person extends valueObject({
@@ -35,7 +34,7 @@ describe(valueObject, () => {
     });
   });
 
-  it("should filter property keys of initalValue", () => {
+  it("should filter property keys of inital value", () => {
     const initalValue = {
       name: "Bob",
       age: 20,
@@ -55,6 +54,11 @@ describe(valueObject, () => {
       age: 20,
       greet: null,
     });
+  });
+
+  it(`can enumerate object keys with "Object.keys()"`, () => {
+    const person = new Person({name: "Bob", age: 20});
+    expect(Object.keys(person).sort()).toEqual(["age", "name"]);
   });
 
   it(`is tolerant of "__proto__" injection`, () => {
@@ -84,9 +88,9 @@ describe(valueObject, () => {
     expect(person.equals(new Person({name: "mike", age: 21}))).toBe(false);
     expect(person.equals(new Person({name: "sam", age: 20}))).toBe(false);
     expect(person.equals({name: "mike", age: 20})).toBe(true);
-    expect(person.equals({name: "mike", age: 20, excess: null} as any)).toBe(
-      false,
-    );
+    expect(
+      person.equals({name: "mike", age: 20, excess: undefined} as any),
+    ).toBe(false);
   });
 
   it("throws an exception when you mutate a value object's property", () => {
