@@ -99,9 +99,9 @@ export const valueObject = <T extends ValueObjectTypeDefinition>(
     }
 
     toJSON(): T {
-      let obj: Partial<T> = {};
+      const obj: Partial<T> = {};
       for (const k of predefinedKeys) {
-        obj[k] = (this as any)[k];
+        (obj as any)[k] = (this as any)[k];
       }
       return obj as T;
     }
