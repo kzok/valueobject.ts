@@ -72,40 +72,5 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "prettier": {
-    "printWidth": 80,
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": true,
-    "singleQuote": false,
-    "quoteProps": "consistent",
-    "trailingComma": "all",
-    "bracketSpacing": false,
-    "arrowParens": "avoid",
-    "overrides": [
-      {
-        "files": "*.md",
-        "options": {
-          "tabWidth": 4,
-          "printWidth": 120
-        }
-      }
-    ]
-  },
-  "jest": {
-    "preset": "ts-jest/presets/js-with-babel",
-    "collectCoverageFrom": [
-      "<rootDir>/src/**/*"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/*.spec.ts{,x}",
-      "<rootDir>/test/**/*.spec.ts{,x}"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "ts",
-      "tsx"
-    ]
   }
 }
