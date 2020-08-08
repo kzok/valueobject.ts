@@ -10,7 +10,7 @@ class BaseClass<_ extends {[k: string]: any}> {
 /**
  * Forbidden keys of value object
  */
-const FORBIDDEN_KEYS = ["__proto__", "toJSON", "equals"] as const;
+const FORBIDDEN_KEYS = ["__proto__", "toJSON"] as const;
 
 /**
  * Value object base class interface
@@ -22,11 +22,6 @@ type ValueObject<T extends {[k: string]: any}> = Readonly<T> &
      * @returns plain object
      */
     toJSON(): T;
-    /**
-     * @param other argument to compare
-     * @returns The results of shallow comparison
-     */
-    equals(other: Readonly<T>): boolean;
   };
 
 /**
@@ -104,19 +99,6 @@ export const valueObject = <T extends ValueObjectTypeDefinition>(
         (obj as any)[k] = (this as any)[k];
       }
       return obj as T;
-    }
-
-    equals(other: Restore<T>): boolean {
-      const keys = Object.keys(other);
-      for (const k of keys) {
-        if (predefinedKeys.indexOf(k) < 0) {
-          return false;
-        }
-        if ((this as any)[k] !== (other as any)[k]) {
-          return false;
-        }
-      }
-      return true;
     }
   } as any;
 };
