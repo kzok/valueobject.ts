@@ -6,6 +6,7 @@
     "removeComments": false,
     "declaration": true,
     "importHelpers": true,
+    "skipLibCheck": true,
 
     "strict": true,
     "noImplicitAny": true,
