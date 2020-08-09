@@ -8,33 +8,37 @@ Tiny typesafe value object library for TypeScript.
 
 <!-- TOC -->
 
--   [Features](#features)
--   [Brief example](#brief-example)
--   [Why and when to use this?](#why-and-when-to-use-this)
--   [Installation](#installation)
--   [API reference](#api-reference)
--   [Credits](#credits)
+-   [valueobject.ts](#valueobjectts)
+    -   [Features](#features)
+    -   [Brief example](#brief-example)
+    -   [Why and when to use this?](#why-and-when-to-use-this)
+    -   [Installation](#installation)
+    -   [API reference](#api-reference)
+    -   [Credits](#credits)
 
 <!-- /TOC -->
 
 ## Features
 
 -   ecmascript 5
--   about 1k bytes with zero dependencies
+-   less than 1k bytes with zero dependencies
 -   commonjs & es module
 -   typesafe and immutable class properties
 -   object keys filtering in runtime
--   defining static type and runtime object keys at once
 
 ## Brief example
 
 ```typescript
-import {valueObject, type, ValueType} from "valueobject.ts";
+import {valueObjectClass} from "@kzok/valueobject-ts";
 
-class Person extends valueObject({
-    name: type.string,
-    age: type.number,
-}) {
+type PersonProps = {
+    name: string;
+    age: number;
+};
+
+const personKeys = ["name", "age"] as const;
+
+class Person extends valueObjectClass<PersonProps>().keys(personKeys) {
     greet(): string {
         return `Hello, I am ${this.name}.`;
     }
@@ -51,7 +55,7 @@ const initialValue = {
         throw new Error("The method won't be overwritten!");
     },
 };
-const person = new Person(initialValue as ValueType<typeof Person>);
+const person = new Person(initialValue);
 
 console.log(person.greet());
 // "Hello, I am Bob."
@@ -104,7 +108,7 @@ class SomeLargeValueObject {
 ```
 
 With many properties, this approach is frustrating.
-So many prior value object libraries introduce the following approach.
+So many prior value object libraries introduce following approach.
 
 ```typescript
 interface ValueObjectConstructor<T extends {[k: string]: any}> {
@@ -138,13 +142,9 @@ class SomeLargeValueObject extends valueObject<SomeLargeValueData>() {
 ```
 
 In TypeScript, however, this approach has a problem.
-Because TypeScript has no exact type, a runtime error occurs in the following case.
+Because TypeScript doesn't have Exact Type, runtime error occurs in a following case.
 
 ```TypeScript
-const factory = (data: SomeLargeValueData): SomeLargeValueObject => {
-    return new SomeLargeValueObject(data);
-}
-
 const passedData = {
     prop1: 1,
     prop2: 2,
@@ -159,7 +159,7 @@ const passedData = {
      */
 };
 
-const nextValueObject = factory(passedData);
+const nextValueObject = new SomeLargeValueObject(passedData);
 
 //-----------------
 
@@ -184,54 +184,12 @@ Then, use javascript module bundler like [webpack](https://webpack.js.org/) or [
 
 ## API reference
 
-<a name="api-value-object" href="#api-value-object">#</a>function **valueObject**(_typedef_)
+<a name="api-value-object-class" href="#api-value-object-class">#</a>function **valueObjectClass**()
 
-Returns value object base class. The base class has 2 method, `toJSON()` which returns plain object of its data, and `equals(other)` which compare shallowly with passed parameter _other_. The parameter _typedef_'s type is plain object with properties type `TypeHolder`, which can create with `type<T>()` function.
-
-<a name="api-type" href="#api-type">#</a>function **type**<_T_>()
-
-Returns `TypeHolder` that contains type _T_, to create value object type definition. Its basic usage is like following.
-
-```typescript
-class Comment extends valueObject({
-    createdAt: type<Date>(),
-    text: type<string>(),
-    parent: type<Comment | null>(),
-}) {
-    /** ... */
-}
-```
-
-`type()` has aliases of following frequent usecases.
-
--   `type.string`
-    -   equals to `type<string>()`
--   `type.number`
-    -   equals to `type<number>()`
--   `type.boolean`
-    -   equals to `type<boolean>()`
--   `type.null`
-    -   equals to `type<null>()`
--   `type.undefined`
-    -   equals to `type<undefined>()`
--   `type.array<T>(arg?: T)`
-    -   example: `type.array(type.string)`
--   `type.optional<T>(arg?: T)`
-    -   required to define optional field
--   `type.union<T>(...args: T[])`
-    -   example: `type.union(type.string, type.null)`
-
-<a name="api-value-type" href="#api-value-type">#</a>type **ValueType**<_T_>
-
-Returns value object data type of the type parameter. Please use like following.
-
-```typescript
-type PersonData = ValueType<Person>; // or `ValueType<typeof Person>;`
-```
+Returns object with a property `keys` which is the function that takes array of property keys to filter and return the base class of the value object.
 
 ## Credits
 
 -   This library is inspired by the prior arts below:
     -   https://github.com/alexeyraspopov/dataclass
     -   https://github.com/almin/ddd-base#valueobject
--   The type definition system in this library is heavily influenced by [io-ts](https://github.com/gcanti/io-ts).

@@ -21,6 +21,7 @@ module.exports = {
     /** @typescript-eslint */
     "@typescript-eslint/prefer-interface": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/explicit-member-accessibility": "off",
     "@typescript-eslint/no-unused-vars": [
       "warn",

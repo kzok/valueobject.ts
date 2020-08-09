@@ -1,5 +1,8 @@
 {
-  "name": "valueobject.ts",
+  "name": "@kzok/valueobject-ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Tiny typesafe value object library for TypeScript",
   "version": "1.1.0",
   "author": "kzok (https://github.com/kzok)",
@@ -25,36 +28,36 @@
   "module": "lib/index.mjs",
   "types": "lib/index.d.ts",
   "devDependencies": {
-    "@types/jest": "^24.0.13",
-    "@typescript-eslint/eslint-plugin": "^1.9.0",
-    "codecov": "^3.5.0",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.3.0",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-prettier": "^3.1.0",
-    "husky": "^2.3.0",
-    "jest": "^24.8.0",
-    "lint-staged": "^8.1.7",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^1.17.1",
-    "release-it": "^12.2.0",
-    "rimraf": "^2.6.3",
-    "rollup": "^1.12.1",
-    "rollup-plugin-dts": "^0.15.1",
-    "rollup-plugin-terser": "^4.0.4",
-    "ts-jest": "^24.0.2",
-    "tslib": "^1.9.3",
-    "typescript": "^3.4.5"
+    "@types/jest": "^26.0.9",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "@wessberg/rollup-plugin-ts": "^1.3.2",
+    "codecov": "^3.7.2",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.2.5",
+    "jest": "^26.2.2",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
+    "release-it": "^13.6.6",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.23.1",
+    "rollup-plugin-terser": "^6.1.0",
+    "ts-jest": "^26.1.4",
+    "tslib": "^2.0.1",
+    "typescript": "^3.9.7"
   },
   "scripts": {
     "build": "rimraf ./lib && rollup -c",
-    "test": "jest --watch",
-    "lint": "run-s lint:*",
-    "lint:prettier": "prettier --write **/*.{js,json,md}",
-    "lint:eslint": "eslint --fix src/**/*.ts",
-    "check": "run-s check:*",
-    "check:jest": "jest --coverage",
-    "check:typescript": "tsc --noEmit --skipLibCheck",
+    "test": "jest",
+    "type-check": "tsc --noEmit",
+    "fmt": "npm run prettier && npm run eslint",
+    "prettier": "prettier --write **/*.{js,json,md}",
+    "eslint": "eslint --fix src/**/*.ts",
+    "check": "npm run test-all && npm run type-check",
+    "test-all": "jest --coverage",
     "prepublishOnly": "npm prune && npm run check && npm run build",
     "release": "release-it"
   },
@@ -71,41 +74,6 @@
     "*.{js,json,md}": [
       "prettier --write",
       "git add"
-    ]
-  },
-  "prettier": {
-    "printWidth": 80,
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": true,
-    "singleQuote": false,
-    "quoteProps": "consistent",
-    "trailingComma": "all",
-    "bracketSpacing": false,
-    "arrowParens": "avoid",
-    "overrides": [
-      {
-        "files": "*.md",
-        "options": {
-          "tabWidth": 4,
-          "printWidth": 120
-        }
-      }
-    ]
-  },
-  "jest": {
-    "preset": "ts-jest/presets/js-with-babel",
-    "collectCoverageFrom": [
-      "<rootDir>/src/**/*"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/*.spec.ts{,x}",
-      "<rootDir>/test/**/*.spec.ts{,x}"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "ts",
-      "tsx"
     ]
   }
 }
