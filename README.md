@@ -1,14 +1,14 @@
-# valueobject.ts
+# @kzok/valueobject-ts
 
 ---
 
 Tiny typesafe value object library for TypeScript.
 
-[![](https://img.shields.io/npm/v/valueobject.ts.svg)](https://www.npmjs.com/package/valueobject.ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://david-dm.org/kzok/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master) [![codecov](https://codecov.io/gh/kzok/valueobject.ts/branch/master/graph/badge.svg)](https://codecov.io/gh/kzok/valueobject.ts)
+[![](https://img.shields.io/npm/v/@kzok/valueobject-ts.svg)](https://www.npmjs.com/package/@kzok/valueobject-ts) [![](https://img.shields.io/david/kzok/valueobject.ts.svg)](https://david-dm.org/kzok/valueobject.ts) [![CircleCI](https://circleci.com/gh/kzok/valueobject.ts/tree/master.svg?style=shield)](https://circleci.com/gh/kzok/valueobject.ts/tree/master) [![codecov](https://codecov.io/gh/kzok/valueobject.ts/branch/master/graph/badge.svg)](https://codecov.io/gh/kzok/valueobject.ts)
 
 <!-- TOC -->
 
--   [valueobject.ts](#valueobjectts)
+-   [@kzok/valueobject-ts](#kzokvalueobject-ts)
     -   [Features](#features)
     -   [Brief example](#brief-example)
     -   [Why and when to use this?](#why-and-when-to-use-this)
