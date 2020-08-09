@@ -9,20 +9,11 @@ type ForbidKeys<K extends string> = {readonly [_ in K]?: never};
 
 type SafeObject = Readonly<Record<string, any>> & ForbidKeys<ForbiddenKeys>;
 
-declare const ___tag: unique symbol;
-
-/**
- * Nominal class type
- */
-class Nominalizer<T extends SafeObject> {
-  private readonly [___tag]: T;
-}
-
 /**
  * Value object base class interface
  * @template T Value object data type
  */
-type ValueObject<T extends SafeObject> = Readonly<T> & Nominalizer<T>;
+type ValueObject<T extends SafeObject> = Readonly<T>;
 
 /**
  * Constructor type of value object
@@ -33,16 +24,31 @@ type ValueObjectConstructor<T extends SafeObject> = {
 };
 
 /**
+ * @template T Value object props type
+ */
+type ReturnOfValueObjectClassFn<T extends SafeObject> = {
+  /**
+   * @param keys property keys to filter
+   * @return Base class of a value object
+   */
+  keys: <K extends keyof T>(
+    keys: readonly K[],
+  ) => ValueObjectConstructor<{[FK in K]: T[FK]}>;
+};
+
+/**
  * @example
  * ```typescript
- * import {valueObject} from "valueobject.ts";
+ * import {valueObjectClass} from "valueobject.ts";
  *
  * type PersonProps = {
  *   name: string,
  *   age: number,
  * };
  *
- * class Person extends valueObject<PersonProps>().withKeys(["name", "age"]) {
+ * const personKeys = ["name", "age"] as const;
+ *
+ * class Person extends valueObjectClass<PersonProps>().keys(personKeys) {
  *   greet(): string {
  *     return `Hello, I am ${this.name}.`;
  *   }
@@ -52,14 +58,10 @@ type ValueObjectConstructor<T extends SafeObject> = {
  * }
  * ```
  */
-export const valueObjectClass = <T extends SafeObject>() => ({
-  /**
-   * @param keys keys to filter props
-   * @return Base class of the value object to extends
-   */
-  keys: <K extends keyof T>(
-    keys: readonly K[],
-  ): ValueObjectConstructor<{[FK in K]: T[FK]}> => {
+export const valueObjectClass = <
+  T extends SafeObject
+>(): ReturnOfValueObjectClassFn<T> => ({
+  keys: <K extends keyof T>(keys: readonly K[]) => {
     const permittedKeys = keys.filter(k => !FORBIDDEN_KEYS.includes(k as any));
 
     return class BaseClass {
