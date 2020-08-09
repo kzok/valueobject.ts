@@ -4,7 +4,7 @@
     "access": "public"
   },
   "description": "Tiny typesafe value object library for TypeScript",
-  "version": "1.1.0",
+  "version": "2.0.1",
   "author": "kzok (https://github.com/kzok)",
   "keywords": [
     "TypeScript",
