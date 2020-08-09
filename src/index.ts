@@ -1,2 +1,1 @@
-export {type} from "./type_holder";
-export * from "./value_object";
+export * from "./value_object_class";
